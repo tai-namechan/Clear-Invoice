@@ -29,15 +29,13 @@ export default async function EditEstimatePage({
           <p className="mt-1 text-sm text-gray-500">{detail.estimate.document_number}</p>
         </div>
         <div className="flex items-center gap-2">
-        <Link href="/estimates">
+          <Link href="/documents">
             <Button variant="secondary" size="sm">一覧へ</Button>
-        </Link>
-        <Link href={`/estimates/${detail.estimate.id}/pdf`} target="_blank" rel="noopener noreferrer">
-        <Button variant="secondary" size="sm" disabled title="PDF機能は近日公開予定">
-            PDF（準備中）
-        </Button>
-        </Link>
-        <DeleteEstimateButton id={detail.estimate.id} />
+          </Link>
+          <Link href={`/estimates/${detail.estimate.id}/preview`}>
+            <Button variant="secondary" size="sm">プレビュー</Button>
+          </Link>
+          <DeleteEstimateButton id={detail.estimate.id} />
         </div>
       </div>
 

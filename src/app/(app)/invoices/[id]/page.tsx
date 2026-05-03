@@ -29,13 +29,13 @@ export default async function EditInvoicePage({
           <p className="mt-1 text-sm text-gray-500">{detail.invoice.document_number}</p>
         </div>
         <div className="flex items-center gap-2">
-            <Link href="/invoices">
-                <Button variant="secondary" size="sm">一覧へ</Button>
-            </Link>
-            <Button variant="secondary" size="sm" disabled title="PDF機能は近日公開予定">
-                PDF（準備中）
-            </Button>
-            <DeleteInvoiceButton id={detail.invoice.id} />
+          <Link href="/documents">
+            <Button variant="secondary" size="sm">一覧へ</Button>
+          </Link>
+          <Link href={`/invoices/${detail.invoice.id}/preview`}>
+            <Button variant="secondary" size="sm">プレビュー</Button>
+          </Link>
+          <DeleteInvoiceButton id={detail.invoice.id} />
         </div>
       </div>
 

@@ -45,3 +45,31 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* A4プレビュー（width/padding/minHeight は DocumentPreview の inline style で管理） */
+.a4-paper {
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+}
+
+/* 印刷時 */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  header {
+    display: none !important;
+  }
+  .a4-container {
+    overflow: visible !important;
+  }
+  .a4-paper {
+    box-shadow: none;
+    width: 100%;
+    min-height: auto;
+    padding: 10mm 15mm;
+    margin: 0;
+  }
+  body {
+    background: white;
+  }
+}

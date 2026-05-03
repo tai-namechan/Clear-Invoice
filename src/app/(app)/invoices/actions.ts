@@ -46,6 +46,7 @@ export async function createInvoiceAction(formData: FormData) {
     const input = parseFormDataToInput(formData)
     const created = await invoiceService.create(supabase, user.id, input)
     revalidatePath('/invoices')
+    revalidatePath('/documents')
     return { success: true as const, id: created.id }
   } catch (e) {
     console.error('createInvoiceAction error:', e)
@@ -66,6 +67,7 @@ export async function updateInvoiceAction(id: string, formData: FormData) {
     await invoiceService.update(supabase, user.id, id, input)
     revalidatePath('/invoices')
     revalidatePath(`/invoices/${id}`)
+    revalidatePath('/documents')
     return { success: true as const }
   } catch (e) {
     console.error('updateInvoiceAction error:', e)

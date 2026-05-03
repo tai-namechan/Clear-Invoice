@@ -77,6 +77,7 @@ export const estimateService = {
     const estimate = await estimateRepository.create(supabase, userId, {
       document_number: documentNumber,
       issue_date: validated.issue_date,
+      target_month: validated.target_month || null,
       client_name: validated.client_name,
       client_honorific: validated.client_honorific,
       client_postal_code: validated.client_postal_code ?? null,
@@ -136,6 +137,7 @@ export const estimateService = {
     // 注: 編集時は document_number と issuer_snapshot は変更しない（発行時の固定値）
     const updated = await estimateRepository.update(supabase, userId, id, {
       issue_date: validated.issue_date,
+      target_month: validated.target_month || null,
       client_name: validated.client_name,
       client_honorific: validated.client_honorific,
       client_postal_code: validated.client_postal_code ?? null,

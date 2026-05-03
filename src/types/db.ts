@@ -25,6 +25,7 @@ export type MyCompany = {
     user_id: string
     document_number: string
     issue_date: string
+    target_month: string | null
     client_name: string
     client_honorific: string | null
     client_postal_code: string | null
