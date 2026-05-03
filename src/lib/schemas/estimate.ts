@@ -11,6 +11,7 @@ export const estimateItemSchema = z.object({
 
 export const estimateSchema = z.object({
   issue_date: z.string().min(1, '発行日を入力してください'),
+  target_month: z.string().regex(/^\d{4}-\d{2}$/, '請求対象月を入力してください').optional().nullable().or(z.literal('')),
   client_name: z.string().min(1, '取引先名を入力してください'),
   client_honorific: z.string().default('様'),
   client_postal_code: z.string().optional().nullable(),

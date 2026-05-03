@@ -21,6 +21,7 @@ function parseFormDataToInput(formData: FormData) {
 
   return {
     issue_date: formData.get('issue_date') as string,
+    target_month: (formData.get('target_month') as string) || null,
     client_name: formData.get('client_name') as string,
     client_honorific: (formData.get('client_honorific') as string) || '様',
     client_postal_code: (formData.get('client_postal_code') as string) || null,
@@ -40,6 +41,7 @@ export async function createEstimateAction(formData: FormData) {
     const input = parseFormDataToInput(formData)
     const created = await estimateService.create(supabase, user.id, input)
     revalidatePath('/estimates')
+    revalidatePath('/documents')
     return { success: true as const, id: created.id }
   } catch (e) {
     console.error('createEstimateAction error:', e)
@@ -60,6 +62,7 @@ export async function updateEstimateAction(id: string, formData: FormData) {
     await estimateService.update(supabase, user.id, id, input)
     revalidatePath('/estimates')
     revalidatePath(`/estimates/${id}`)
+    revalidatePath('/documents')
     return { success: true as const }
   } catch (e) {
     console.error('updateEstimateAction error:', e)

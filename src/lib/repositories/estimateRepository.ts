@@ -4,6 +4,7 @@ import type { Estimate, IssuerSnapshot, ClientSnapshot } from '@/types/db'
 type CreateEstimatePayload = {
   document_number: string
   issue_date: string
+  target_month: string | null
   client_name: string
   client_honorific: string
   client_postal_code: string | null
