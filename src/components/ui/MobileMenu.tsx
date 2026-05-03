@@ -49,9 +49,22 @@ export function MobileMenu({ displayName }: { displayName: string }) {
           />
           {/* メニュー本体 */}
           <div className="fixed top-0 right-0 bottom-0 w-72 bg-white z-30 shadow-xl flex flex-col">
-            <div className="p-4 border-b border-gray-200">
-              <p className="text-xs text-gray-500">ログイン中</p>
-              <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs text-gray-500">ログイン中</p>
+                <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"
+                aria-label="メニューを閉じる"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
             </div>
             <nav className="flex-1 p-2">
               <Link
@@ -60,6 +73,13 @@ export function MobileMenu({ displayName }: { displayName: string }) {
                 className="block px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 ダッシュボード
+              </Link>
+              <Link
+                href="/documents"
+                onClick={() => setOpen(false)}
+                className="block px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+              >
+                書類一覧
               </Link>
               <Link
                 href="/estimates"

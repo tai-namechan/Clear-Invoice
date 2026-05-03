@@ -25,6 +25,9 @@ export default async function AppLayout({
 
           {/* PC: ナビメニュー */}
           <nav className="hidden md:flex items-center gap-4 text-sm">
+            <Link href="/documents" className="text-gray-600 hover:text-gray-900">
+              書類一覧
+            </Link>
             <Link href="/estimates" className="text-gray-600 hover:text-gray-900">
               見積書
             </Link>
@@ -52,7 +55,21 @@ export default async function AppLayout({
           </div>
         </div>
       </header>
-      <main className="max-w-5xl mx-auto px-4 py-6">{children}</main>
+      <main className="max-w-5xl mx-auto px-4 py-6">
+        {children}
+        <div className="md:hidden mt-8 pb-4">
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            ダッシュボードへ戻る
+          </Link>
+        </div>
+      </main>
     </div>
   )
 }
