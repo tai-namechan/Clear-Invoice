@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type Props = {
   documentNumber: string
@@ -18,6 +18,13 @@ export function PreviewActions({ documentNumber, docType, clientName, issueDate 
   const filename = `${safeName} ${docLabel}${datePart}`
 
   const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/i.test(navigator.userAgent)
+  const [canShareFiles, setCanShareFiles] = useState(false)
+  const [sharingPdf, setSharingPdf] = useState(false)
+
+  useEffect(() => {
+    const probe = new File([''], 'probe.pdf', { type: 'application/pdf' })
+    setCanShareFiles(!!navigator.canShare?.({ files: [probe] }))
+  }, [])
 
   async function generatePdfBlob(): Promise<Blob> {
     const { default: jsPDF } = await import('jspdf')
@@ -51,7 +58,6 @@ export function PreviewActions({ documentNumber, docType, clientName, issueDate 
       const blob = await generatePdfBlob()
       const url = URL.createObjectURL(blob)
       if (isIOS) {
-        // iOS は download 属性が効かないため現在のタブで開く（共有メニューから保存可能）
         window.location.href = url
       } else {
         const a = document.createElement('a')
@@ -70,6 +76,21 @@ export function PreviewActions({ documentNumber, docType, clientName, issueDate 
     }
   }
 
+  const handleShare = async () => {
+    setSharingPdf(true)
+    try {
+      const blob = await generatePdfBlob()
+      const file = new File([blob], `${filename}.pdf`, { type: 'application/pdf' })
+      await navigator.share({ files: [file], title: filename })
+    } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return
+      console.error(e)
+      alert('PDFの共有に失敗しました')
+    } finally {
+      setSharingPdf(false)
+    }
+  }
+
   const handlePrint = () => {
     const original = document.title
     document.title = filename
@@ -79,6 +100,30 @@ export function PreviewActions({ documentNumber, docType, clientName, issueDate 
 
   return (
     <div className="no-print flex flex-wrap gap-2">
+      {/* PDFを共有（Web Share API対応端末のみ表示） */}
+      {canShareFiles && (
+        <button
+          type="button"
+          onClick={handleShare}
+          disabled={sharingPdf || downloadingPdf}
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition disabled:opacity-60"
+        >
+          {sharingPdf ? (
+            <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16 6 12 2 8 6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
+            </svg>
+          )}
+          {sharingPdf ? '生成中...' : 'PDFを共有'}
+        </button>
+      )}
+
       {/* PDFダウンロード */}
       <button
         type="button"
