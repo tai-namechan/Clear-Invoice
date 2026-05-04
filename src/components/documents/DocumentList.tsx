@@ -18,7 +18,6 @@ type DocumentRow = {
   issue_date: string
   target_month: string | null
   total: number
-  status: 'draft' | 'issued'
   subject: string | null
 }
 
@@ -79,7 +78,6 @@ export function DocumentList({ estimates, invoices }: Props) {
       issue_date: e.issue_date,
       target_month: e.target_month,
       total: e.total,
-      status: e.status,
       subject: e.subject,
     })),
     ...invoices.map((i) => ({
@@ -91,7 +89,6 @@ export function DocumentList({ estimates, invoices }: Props) {
       issue_date: i.issue_date,
       target_month: i.target_month,
       total: i.total,
-      status: i.status,
       subject: i.subject,
     })),
   ].sort((a, b) => {
@@ -130,30 +127,30 @@ export function DocumentList({ estimates, invoices }: Props) {
       </div>
 
       {/* 請求対象月フィルター */}
-      <div className="flex items-center gap-2">
-        <div className="flex-1 relative">
-          <label htmlFor="month-filter" className="block text-xs text-gray-500 mb-1">
-            請求対象月
-          </label>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="month-filter" className="block text-xs text-gray-500">
+          請求対象月
+        </label>
+        <div className="flex items-center gap-2 min-w-0">
           <input
             ref={monthInputRef}
             id="month-filter"
             type="month"
             defaultValue={targetMonth}
             onChange={(e) => updateParams({ targetMonth: e.target.value || null })}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+            className="flex-1 min-w-0 px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
             style={{ colorScheme: 'light' }}
           />
+          {targetMonth && (
+            <button
+              type="button"
+              onClick={() => updateParams({ targetMonth: null })}
+              className="flex-shrink-0 px-3 py-2.5 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            >
+              クリア
+            </button>
+          )}
         </div>
-        {targetMonth && (
-          <button
-            type="button"
-            onClick={() => updateParams({ targetMonth: null })}
-            className="mt-5 px-3 py-2.5 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition whitespace-nowrap"
-          >
-            クリア
-          </button>
-        )}
       </div>
 
       {/* 一覧 */}
@@ -215,13 +212,6 @@ export function DocumentList({ estimates, invoices }: Props) {
                     <p className="text-base font-semibold text-gray-900">
                       ¥{formatCurrency(doc.total)}
                     </p>
-                    <span
-                      className={`text-xs ${
-                        doc.status === 'issued' ? 'text-green-600' : 'text-gray-400'
-                      }`}
-                    >
-                      {doc.status === 'issued' ? '発行済' : '下書き'}
-                    </span>
                   </div>
                 </div>
                 <div className="mt-3 flex gap-2">

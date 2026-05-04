@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { invoiceService } from '@/lib/services/invoiceService'
 import { DocumentPreview } from '@/components/preview/DocumentPreview'
 import { PreviewActions } from '@/components/preview/PreviewActions'
+import { ScaledPreviewContainer } from '@/components/preview/ScaledPreviewContainer'
 
 export default async function InvoicePreviewPage({
   params,
@@ -61,15 +62,13 @@ export default async function InvoicePreviewPage({
       </div>
 
       {/* A4プレビュー */}
-      <div className="a4-container overflow-x-auto">
-        <div className="min-w-[680px]">
-          <DocumentPreview
-            docType="invoice"
-            invoice={detail.invoice}
-            items={detail.items}
-          />
-        </div>
-      </div>
+      <ScaledPreviewContainer>
+        <DocumentPreview
+          docType="invoice"
+          invoice={detail.invoice}
+          items={detail.items}
+        />
+      </ScaledPreviewContainer>
     </div>
   )
 }

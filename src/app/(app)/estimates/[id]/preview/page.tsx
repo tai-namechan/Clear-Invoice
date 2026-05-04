@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { estimateService } from '@/lib/services/estimateService'
 import { DocumentPreview } from '@/components/preview/DocumentPreview'
 import { PreviewActions } from '@/components/preview/PreviewActions'
+import { ScaledPreviewContainer } from '@/components/preview/ScaledPreviewContainer'
 
 export default async function EstimatePreviewPage({
   params,
@@ -61,15 +62,13 @@ export default async function EstimatePreviewPage({
       </div>
 
       {/* A4プレビュー */}
-      <div className="a4-container overflow-x-auto">
-        <div className="min-w-[680px]">
-          <DocumentPreview
-            docType="estimate"
-            estimate={detail.estimate}
-            items={detail.items}
-          />
-        </div>
-      </div>
+      <ScaledPreviewContainer>
+        <DocumentPreview
+          docType="estimate"
+          estimate={detail.estimate}
+          items={detail.items}
+        />
+      </ScaledPreviewContainer>
     </div>
   )
 }
