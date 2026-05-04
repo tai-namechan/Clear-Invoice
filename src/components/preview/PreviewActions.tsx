@@ -18,7 +18,7 @@ export function PreviewActions({ documentNumber, docType }: Props) {
 
   const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/i.test(navigator.userAgent)
 
-  async function generatePdfDataUri(): Promise<string> {
+  async function generatePdfBlob(): Promise<Blob> {
     const { default: jsPDF } = await import('jspdf')
     const { default: html2canvas } = await import('html2canvas')
 
@@ -41,21 +41,23 @@ export function PreviewActions({ documentNumber, docType }: Props) {
     const pdfW = pdf.internal.pageSize.getWidth()
     const pdfH = (canvas.height * pdfW) / canvas.width
     pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH)
-    return pdf.output('datauristring')
+    return pdf.output('blob')
   }
 
   const handleOpenPdf = async () => {
-    // ポップアップブロック回避のため async 前に同期でウィンドウを開く
-    // iOS は blob URL を別タブで開けないため data URI を使う
+    // PC: ポップアップブロック回避のため async 前に同期でウィンドウを開く
+    // iOS: blob URL を別タブで開けないため現在のタブで開く
     const win = isIOS ? null : window.open('about:blank', '_blank')
     setOpeningPdf(true)
     try {
-      const dataUri = await generatePdfDataUri()
+      const blob = await generatePdfBlob()
+      const url = URL.createObjectURL(blob)
       if (win) {
-        win.location.href = dataUri
+        win.location.href = url
+        setTimeout(() => URL.revokeObjectURL(url), 60000)
       } else {
-        // iOS: 現在のタブで PDF を開く（Safari の共有メニューから保存可能）
-        window.location.href = dataUri
+        // iOS Safari は blob URL のナビゲーションをサポートしている
+        window.location.href = url
       }
     } catch (e) {
       console.error(e)
@@ -69,17 +71,19 @@ export function PreviewActions({ documentNumber, docType }: Props) {
   const handleDownload = async () => {
     setDownloadingPdf(true)
     try {
-      const dataUri = await generatePdfDataUri()
+      const blob = await generatePdfBlob()
+      const url = URL.createObjectURL(blob)
       if (isIOS) {
-        // iOS は download 属性が効かないため PDF を開いて共有メニューから保存
-        window.location.href = dataUri
+        // iOS は download 属性が効かないため現在のタブで開く（共有メニューから保存可能）
+        window.location.href = url
       } else {
         const a = document.createElement('a')
-        a.href = dataUri
+        a.href = url
         a.download = `${filename}.pdf`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
+        setTimeout(() => URL.revokeObjectURL(url), 10000)
       }
     } catch (e) {
       console.error(e)
