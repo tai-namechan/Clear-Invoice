@@ -18,7 +18,6 @@ type DocumentRow = {
   issue_date: string
   target_month: string | null
   total: number
-  status: 'draft' | 'issued'
   subject: string | null
 }
 
@@ -79,7 +78,6 @@ export function DocumentList({ estimates, invoices }: Props) {
       issue_date: e.issue_date,
       target_month: e.target_month,
       total: e.total,
-      status: e.status,
       subject: e.subject,
     })),
     ...invoices.map((i) => ({
@@ -91,7 +89,6 @@ export function DocumentList({ estimates, invoices }: Props) {
       issue_date: i.issue_date,
       target_month: i.target_month,
       total: i.total,
-      status: i.status,
       subject: i.subject,
     })),
   ].sort((a, b) => {
@@ -215,13 +212,6 @@ export function DocumentList({ estimates, invoices }: Props) {
                     <p className="text-base font-semibold text-gray-900">
                       ¥{formatCurrency(doc.total)}
                     </p>
-                    <span
-                      className={`text-xs ${
-                        doc.status === 'issued' ? 'text-green-600' : 'text-gray-400'
-                      }`}
-                    >
-                      {doc.status === 'issued' ? '発行済' : '下書き'}
-                    </span>
                   </div>
                 </div>
                 <div className="mt-3 flex gap-2">

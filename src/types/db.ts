@@ -36,11 +36,10 @@ export type MyCompany = {
     notes: string | null
     issuer_snapshot: IssuerSnapshot
     client_snapshot: ClientSnapshot
-    status: 'draft' | 'issued'
     created_at: string
     updated_at: string
   }
-  
+
   export type Invoice = {
     id: string
     user_id: string
@@ -58,10 +57,9 @@ export type MyCompany = {
     total_label: string             // ← 追加
     issuer_snapshot: IssuerSnapshot
     client_snapshot: ClientSnapshot
-    status: 'draft' | 'issued'
     created_at: string
     updated_at: string
-  } 
+  }
   
   export type DocumentItem = {
     id: string
