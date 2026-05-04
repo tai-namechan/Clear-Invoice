@@ -45,8 +45,10 @@ export function InvoiceForm({ initial }: Props) {
         : await createInvoiceAction(formData)
 
       if (result.success) {
-        if ('id' in result && result.id) {
-          router.push(`/invoices/${result.id}`)
+        const id = ('id' in result && result.id) ? result.id : initial?.invoice.id
+        if (id) {
+          setToast({ type: 'success', text: '保存しました' })
+          setTimeout(() => router.push(`/invoices/${id}/preview`), 800)
         } else {
           router.refresh()
           setToast({ type: 'success', text: '保存しました' })
