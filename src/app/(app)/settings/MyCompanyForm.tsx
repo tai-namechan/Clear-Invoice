@@ -132,7 +132,6 @@ export function MyCompanyForm({ initial }: Props) {
           name="bank_account_holder"
           label="口座名義"
           hint="カタカナで入力してください"
-          numericMode="integer"
           defaultValue={initial?.bank_account_holder ?? ''}
         />
       </section>
