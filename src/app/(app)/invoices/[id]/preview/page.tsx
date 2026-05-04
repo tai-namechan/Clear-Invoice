@@ -55,6 +55,8 @@ export default async function InvoicePreviewPage({
         <PreviewActions
           documentNumber={detail.invoice.document_number}
           docType="invoice"
+          clientName={detail.invoice.client_name}
+          issueDate={detail.invoice.issue_date}
         />
       </div>
 
