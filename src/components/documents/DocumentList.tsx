@@ -130,30 +130,30 @@ export function DocumentList({ estimates, invoices }: Props) {
       </div>
 
       {/* 請求対象月フィルター */}
-      <div className="flex items-center gap-2">
-        <div className="flex-1 relative">
-          <label htmlFor="month-filter" className="block text-xs text-gray-500 mb-1">
-            請求対象月
-          </label>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="month-filter" className="block text-xs text-gray-500">
+          請求対象月
+        </label>
+        <div className="flex items-center gap-2 min-w-0">
           <input
             ref={monthInputRef}
             id="month-filter"
             type="month"
             defaultValue={targetMonth}
             onChange={(e) => updateParams({ targetMonth: e.target.value || null })}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+            className="flex-1 min-w-0 px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
             style={{ colorScheme: 'light' }}
           />
+          {targetMonth && (
+            <button
+              type="button"
+              onClick={() => updateParams({ targetMonth: null })}
+              className="flex-shrink-0 px-3 py-2.5 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            >
+              クリア
+            </button>
+          )}
         </div>
-        {targetMonth && (
-          <button
-            type="button"
-            onClick={() => updateParams({ targetMonth: null })}
-            className="mt-5 px-3 py-2.5 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition whitespace-nowrap"
-          >
-            クリア
-          </button>
-        )}
       </div>
 
       {/* 一覧 */}
