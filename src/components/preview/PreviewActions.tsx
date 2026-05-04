@@ -5,13 +5,17 @@ import { useState } from 'react'
 type Props = {
   documentNumber: string
   docType: 'estimate' | 'invoice'
+  clientName: string
+  issueDate: string
 }
 
-export function PreviewActions({ documentNumber, docType }: Props) {
+export function PreviewActions({ documentNumber, docType, clientName, issueDate }: Props) {
   const [downloadingPdf, setDownloadingPdf] = useState(false)
 
-  const prefix = docType === 'invoice' ? 'invoice' : 'estimate'
-  const filename = `${prefix}_${documentNumber}`
+  const docLabel = docType === 'invoice' ? '請求書' : '見積書'
+  const datePart = issueDate.replace(/-/g, '')
+  const safeName = clientName.replace(/[\\/:*?"<>|]/g, '_')
+  const filename = `${safeName} ${docLabel}${datePart}`
 
   const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/i.test(navigator.userAgent)
 

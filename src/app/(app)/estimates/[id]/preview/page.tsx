@@ -55,6 +55,8 @@ export default async function EstimatePreviewPage({
         <PreviewActions
           documentNumber={detail.estimate.document_number}
           docType="estimate"
+          clientName={detail.estimate.client_name}
+          issueDate={detail.estimate.issue_date}
         />
       </div>
 

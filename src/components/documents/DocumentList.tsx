@@ -229,7 +229,7 @@ export function DocumentList({ estimates, invoices }: Props) {
                     href={previewHref}
                     className="flex-1 py-2 text-center text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition"
                   >
-                    プレビュー
+                    {doc.docType === 'estimate' ? '見積書を見る' : '請求書を見る'}
                   </Link>
                   <Link
                     href={editHref}
