@@ -1,6 +1,5 @@
 import type { Estimate, Invoice } from '@/types/db'
 import Link from 'next/link'
-import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { estimateService } from '@/lib/services/estimateService'
 import { invoiceService } from '@/lib/services/invoiceService'
@@ -81,27 +80,49 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      {/* ヒーロー画像 */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-        {/* PC: hero-pc.png */}
-        <Image
-          src="/images/hero-pc.png"
-          alt="手書きの請求書、もう卒業"
-          width={2172}
-          height={724}
-          className="hidden md:block w-full h-auto"
-          priority
-        />
-        {/* スマホ: auth-hero.png */}
-        <Image
-          src="/images/auth-hero.png"
-          alt="手書きの請求書、もう卒業"
-          width={1200}
-          height={500}
-          className="block md:hidden w-full h-auto"
-          priority
-        />
+      {/* クイックアクション */}
+      <div className="grid grid-cols-2 gap-3">
+        <Link
+          href="/estimates/new"
+          className="flex flex-col items-center justify-center gap-2 bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 hover:bg-blue-50 transition group"
+        >
+          <div className="w-12 h-12 rounded-xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-blue-600">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="12" y1="11" x2="12" y2="17" />
+              <line x1="9" y1="14" x2="15" y2="14" />
+            </svg>
+          </div>
+          <span className="text-sm font-semibold text-gray-800">見積書を作成</span>
+        </Link>
+        <Link
+          href="/invoices/new"
+          className="flex flex-col items-center justify-center gap-2 bg-white rounded-2xl border border-gray-200 p-5 hover:border-green-300 hover:bg-green-50 transition group"
+        >
+          <div className="w-12 h-12 rounded-xl bg-green-50 group-hover:bg-green-100 flex items-center justify-center transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-green-600">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="12" y1="11" x2="12" y2="17" />
+              <line x1="9" y1="14" x2="15" y2="14" />
+            </svg>
+          </div>
+          <span className="text-sm font-semibold text-gray-800">請求書を作成</span>
+        </Link>
       </div>
+      <Link
+        href="/documents"
+        className="flex items-center justify-center gap-2 w-full bg-white rounded-2xl border border-gray-200 py-4 px-5 hover:border-gray-300 hover:bg-gray-50 transition text-sm font-semibold text-gray-700"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-gray-500">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="9" y1="13" x2="15" y2="13" />
+          <line x1="9" y1="17" x2="15" y2="17" />
+        </svg>
+        書類一覧を見る
+      </Link>
 
       {/* 集計カード */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
