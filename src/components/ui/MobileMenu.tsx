@@ -22,7 +22,7 @@ export function MobileMenu({ displayName }: { displayName: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center"
+        className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center"
         aria-label="メニュー"
       >
         <svg
@@ -30,13 +30,14 @@ export function MobileMenu({ displayName }: { displayName: string }) {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.8"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
           className="w-5 h-5 text-gray-600"
         >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
         </svg>
       </button>
 
