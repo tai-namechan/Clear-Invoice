@@ -41,6 +41,20 @@ export function PreviewActions({ documentNumber, docType, clientName, issueDate 
         clonedDoc
           .querySelectorAll('link[rel="stylesheet"], style')
           .forEach((s) => s.remove())
+        // ScaledPreviewContainer のtransform/overflow をリセットし
+        // html2canvas がフルサイズでキャプチャできるようにする
+        const a4 = clonedDoc.querySelector<HTMLElement>('.a4-paper')
+        if (a4) {
+          const inner = a4.parentElement
+          if (inner) {
+            inner.style.transform = 'none'
+            const outer = inner.parentElement
+            if (outer) {
+              outer.style.height = 'auto'
+              outer.style.overflow = 'visible'
+            }
+          }
+        }
       },
     })
 
