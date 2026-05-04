@@ -8,17 +8,14 @@ type Props = {
 }
 
 export function PreviewActions({ documentNumber, docType }: Props) {
-  const [openingPdf, setOpeningPdf] = useState(false)
   const [downloadingPdf, setDownloadingPdf] = useState(false)
 
   const prefix = docType === 'invoice' ? 'invoice' : 'estimate'
   const filename = `${prefix}_${documentNumber}`
 
-  const isBusy = openingPdf || downloadingPdf
-
   const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/i.test(navigator.userAgent)
 
-  async function generatePdfDataUri(): Promise<string> {
+  async function generatePdfBlob(): Promise<Blob> {
     const { default: jsPDF } = await import('jspdf')
     const { default: html2canvas } = await import('html2canvas')
 
@@ -41,45 +38,25 @@ export function PreviewActions({ documentNumber, docType }: Props) {
     const pdfW = pdf.internal.pageSize.getWidth()
     const pdfH = (canvas.height * pdfW) / canvas.width
     pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH)
-    return pdf.output('datauristring')
-  }
-
-  const handleOpenPdf = async () => {
-    // ポップアップブロック回避のため async 前に同期でウィンドウを開く
-    // iOS は blob URL を別タブで開けないため data URI を使う
-    const win = isIOS ? null : window.open('about:blank', '_blank')
-    setOpeningPdf(true)
-    try {
-      const dataUri = await generatePdfDataUri()
-      if (win) {
-        win.location.href = dataUri
-      } else {
-        // iOS: 現在のタブで PDF を開く（Safari の共有メニューから保存可能）
-        window.location.href = dataUri
-      }
-    } catch (e) {
-      console.error(e)
-      win?.close()
-      alert('PDFの生成に失敗しました')
-    } finally {
-      setOpeningPdf(false)
-    }
+    return pdf.output('blob')
   }
 
   const handleDownload = async () => {
     setDownloadingPdf(true)
     try {
-      const dataUri = await generatePdfDataUri()
+      const blob = await generatePdfBlob()
+      const url = URL.createObjectURL(blob)
       if (isIOS) {
-        // iOS は download 属性が効かないため PDF を開いて共有メニューから保存
-        window.location.href = dataUri
+        // iOS は download 属性が効かないため現在のタブで開く（共有メニューから保存可能）
+        window.location.href = url
       } else {
         const a = document.createElement('a')
-        a.href = dataUri
+        a.href = url
         a.download = `${filename}.pdf`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
+        setTimeout(() => URL.revokeObjectURL(url), 10000)
       }
     } catch (e) {
       console.error(e)
@@ -98,33 +75,11 @@ export function PreviewActions({ documentNumber, docType }: Props) {
 
   return (
     <div className="no-print flex flex-wrap gap-2">
-      {/* PDFを開く */}
-      <button
-        type="button"
-        onClick={handleOpenPdf}
-        disabled={isBusy}
-        className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-60"
-      >
-        {openingPdf ? (
-          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
-        )}
-        {openingPdf ? '生成中...' : 'PDFを開く'}
-      </button>
-
       {/* PDFダウンロード */}
       <button
         type="button"
         onClick={handleDownload}
-        disabled={isBusy}
+        disabled={downloadingPdf}
         className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-60"
       >
         {downloadingPdf ? (
@@ -146,7 +101,7 @@ export function PreviewActions({ documentNumber, docType }: Props) {
       <button
         type="button"
         onClick={handlePrint}
-        disabled={isBusy}
+        disabled={downloadingPdf}
         className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-700 transition disabled:opacity-60"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
