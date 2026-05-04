@@ -16,7 +16,9 @@ export function PreviewActions({ documentNumber, docType }: Props) {
 
   const isBusy = openingPdf || downloadingPdf
 
-  async function generatePdfBlob(): Promise<Blob> {
+  const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/i.test(navigator.userAgent)
+
+  async function generatePdfDataUri(): Promise<string> {
     const { default: jsPDF } = await import('jspdf')
     const { default: html2canvas } = await import('html2canvas')
 
@@ -24,10 +26,9 @@ export function PreviewActions({ documentNumber, docType }: Props) {
     if (!el) throw new Error('プレビュー要素が見つかりません')
 
     const canvas = await html2canvas(el, {
-      scale: 2,
+      scale: 1.5,
       useCORS: true,
       backgroundColor: '#ffffff',
-      // スタイルシートを除去して oklch を排除する
       onclone: (clonedDoc) => {
         clonedDoc
           .querySelectorAll('link[rel="stylesheet"], style')
@@ -35,23 +36,30 @@ export function PreviewActions({ documentNumber, docType }: Props) {
       },
     })
 
-    const imgData = canvas.toDataURL('image/png')
+    const imgData = canvas.toDataURL('image/jpeg', 0.85)
     const pdf = new jsPDF('p', 'mm', 'a4')
     const pdfW = pdf.internal.pageSize.getWidth()
     const pdfH = (canvas.height * pdfW) / canvas.width
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH)
-    return pdf.output('blob')
+    pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH)
+    return pdf.output('datauristring')
   }
 
   const handleOpenPdf = async () => {
+    // ポップアップブロック回避のため async 前に同期でウィンドウを開く
+    // iOS は blob URL を別タブで開けないため data URI を使う
+    const win = isIOS ? null : window.open('about:blank', '_blank')
     setOpeningPdf(true)
     try {
-      const blob = await generatePdfBlob()
-      const url = URL.createObjectURL(blob)
-      window.open(url, '_blank')
-      setTimeout(() => URL.revokeObjectURL(url), 60000)
+      const dataUri = await generatePdfDataUri()
+      if (win) {
+        win.location.href = dataUri
+      } else {
+        // iOS: 現在のタブで PDF を開く（Safari の共有メニューから保存可能）
+        window.location.href = dataUri
+      }
     } catch (e) {
       console.error(e)
+      win?.close()
       alert('PDFの生成に失敗しました')
     } finally {
       setOpeningPdf(false)
@@ -61,15 +69,18 @@ export function PreviewActions({ documentNumber, docType }: Props) {
   const handleDownload = async () => {
     setDownloadingPdf(true)
     try {
-      const blob = await generatePdfBlob()
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${filename}.pdf`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      setTimeout(() => URL.revokeObjectURL(url), 10000)
+      const dataUri = await generatePdfDataUri()
+      if (isIOS) {
+        // iOS は download 属性が効かないため PDF を開いて共有メニューから保存
+        window.location.href = dataUri
+      } else {
+        const a = document.createElement('a')
+        a.href = dataUri
+        a.download = `${filename}.pdf`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+      }
     } catch (e) {
       console.error(e)
       alert('PDFのダウンロードに失敗しました')
