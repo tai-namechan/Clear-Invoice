@@ -47,8 +47,7 @@ export function EstimateForm({ initial }: Props) {
       if (result.success) {
         const id = ('id' in result && result.id) ? result.id : initial?.estimate.id
         if (id) {
-          setToast({ type: 'success', text: '保存しました' })
-          setTimeout(() => router.push(`/estimates/${id}/preview`), 800)
+          router.push(`/estimates/${id}/preview?saved=1`)
         } else {
           router.refresh()
           setToast({ type: 'success', text: '保存しました' })

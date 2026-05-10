@@ -1,17 +1,23 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { deleteEstimateAction } from '@/app/(app)/estimates/actions'
 
 export function DeleteEstimateButton({ id }: { id: string }) {
-  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+  const [isPending, setIsPending] = useState(false)
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!confirm('この見積書を削除しますか？この操作は元に戻せません。')) return
-    startTransition(async () => {
-      await deleteEstimateAction(id)
-    })
+    setIsPending(true)
+    const result = await deleteEstimateAction(id)
+    if (result?.success) {
+      router.push('/documents')
+    } else {
+      setIsPending(false)
+    }
   }
 
   return (

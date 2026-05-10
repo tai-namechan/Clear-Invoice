@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { estimateService } from '@/lib/services/estimateService'
 
@@ -81,6 +80,8 @@ export async function deleteEstimateAction(id: string) {
 
     await estimateService.delete(supabase, user.id, id)
     revalidatePath('/estimates')
+    revalidatePath('/documents')
+    return { success: true as const }
   } catch (e) {
     console.error('deleteEstimateAction error:', e)
     return {
@@ -88,6 +89,4 @@ export async function deleteEstimateAction(id: string) {
       message: e instanceof Error ? e.message : '削除に失敗しました',
     }
   }
-
-  redirect('/estimates')
 }
