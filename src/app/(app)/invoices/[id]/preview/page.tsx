@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { invoiceService } from '@/lib/services/invoiceService'
 import { DocumentPreview } from '@/components/preview/DocumentPreview'
 import { PreviewActions } from '@/components/preview/PreviewActions'
 import { ScaledPreviewContainer } from '@/components/preview/ScaledPreviewContainer'
+import { SavedToast } from '@/components/ui/SavedToast'
 
 export default async function InvoicePreviewPage({
   params,
@@ -24,6 +26,7 @@ export default async function InvoicePreviewPage({
 
   return (
     <div className="space-y-4">
+      <Suspense><SavedToast /></Suspense>
       {/* 操作バー */}
       <div className="no-print flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">

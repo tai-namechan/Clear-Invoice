@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { invoiceService } from '@/lib/services/invoiceService'
 
@@ -86,6 +85,8 @@ export async function deleteInvoiceAction(id: string) {
 
     await invoiceService.delete(supabase, user.id, id)
     revalidatePath('/invoices')
+    revalidatePath('/documents')
+    return { success: true as const }
   } catch (e) {
     console.error('deleteInvoiceAction error:', e)
     return {
@@ -93,6 +94,4 @@ export async function deleteInvoiceAction(id: string) {
       message: e instanceof Error ? e.message : '削除に失敗しました',
     }
   }
-
-  redirect('/invoices')
 }

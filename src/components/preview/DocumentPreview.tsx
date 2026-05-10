@@ -258,7 +258,7 @@ export function DocumentPreview(props: Props) {
 
       {/* ── フッター（振込先・備考） ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '12px' }}>
-        {bankLine && (
+        {!isEstimate && bankLine && (
           <div
             style={{
               padding: '10px 14px',
