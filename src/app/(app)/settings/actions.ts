@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { myCompanyService } from '@/lib/services/myCompanyService'
 import { myCompanySchema } from '@/lib/schemas/myCompany'
@@ -30,29 +29,11 @@ export async function saveMyCompanyAction(formData: FormData) {
   }
 
   try {
-    // ★ デバッグ: Cookie が飛んでいるか確認
-    const cookieStore = await cookies()
-    const allCookies = cookieStore.getAll()
-    console.log('=== DEBUG: Cookies in Action ===')
-    console.log('Total cookies:', allCookies.length)
-    console.log('Cookie names:', allCookies.map(c => c.name))
-    console.log('Supabase auth cookies:', allCookies.filter(c => c.name.includes('sb-')).map(c => ({ name: c.name, hasValue: !!c.value })))
-    console.log('================================')
-
     const supabase = await createClient()
-
-    // ★ デバッグ: getSession でも試す
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    console.log('=== DEBUG: Session ===')
-    console.log('Session exists:', !!session)
-    console.log('Session error:', sessionError)
-    console.log('User ID from session:', session?.user?.id)
-    console.log('======================')
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      console.error('auth error in action:', authError)
       return { success: false as const, message: 'ログインし直してください' }
     }
 
