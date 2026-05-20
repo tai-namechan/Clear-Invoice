@@ -112,6 +112,20 @@ export default async function DashboardPage() {
         </Link>
       </div>
       <Link
+        href="/contracts/new"
+        className="flex flex-col items-center justify-center gap-2 bg-white rounded-2xl border border-gray-200 p-5 hover:border-amber-300 hover:bg-amber-50 transition group"
+      >
+        <div className="w-12 h-12 rounded-xl bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center transition">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-amber-600">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="9" y1="13" x2="15" y2="13" />
+            <line x1="9" y1="17" x2="13" y2="17" />
+          </svg>
+        </div>
+        <span className="text-sm font-semibold text-gray-800">契約書を作成</span>
+      </Link>
+      <Link
         href="/documents"
         className="flex items-center justify-center gap-2 w-full bg-white rounded-2xl border border-gray-200 py-4 px-5 hover:border-gray-300 hover:bg-gray-50 transition text-sm font-semibold text-gray-700"
       >

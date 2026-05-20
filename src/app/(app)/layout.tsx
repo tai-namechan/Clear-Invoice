@@ -34,6 +34,9 @@ export default async function AppLayout({
             <Link href="/invoices" className="text-gray-600 hover:text-gray-900">
               請求書
             </Link>
+            <Link href="/contracts" className="text-gray-600 hover:text-gray-900">
+              契約書
+            </Link>
             <Link href="/account" className="text-gray-600 hover:text-gray-900">
               アカウント
             </Link>

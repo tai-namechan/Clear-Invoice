@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { estimateService } from '@/lib/services/estimateService'
 import { invoiceService } from '@/lib/services/invoiceService'
+import { contractService } from '@/lib/services/contractService'
 import { Button } from '@/components/ui/Button'
 import { DocumentList } from '@/components/documents/DocumentList'
 
@@ -12,12 +13,13 @@ export default async function DocumentsPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [estimates, invoices] = user
+  const [estimates, invoices, contracts] = user
     ? await Promise.all([
         estimateService.list(supabase, user.id),
         invoiceService.list(supabase, user.id),
+        contractService.list(supabase, user.id),
       ])
-    : [[], []]
+    : [[], [], []]
 
   return (
     <div className="space-y-6">
@@ -36,7 +38,7 @@ export default async function DocumentsPage() {
       </div>
 
       <Suspense fallback={<div className="text-center py-8 text-gray-400">読み込み中...</div>}>
-        <DocumentList estimates={estimates} invoices={invoices} />
+        <DocumentList estimates={estimates} invoices={invoices} contracts={contracts} />
       </Suspense>
     </div>
   )
