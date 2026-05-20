@@ -97,6 +97,13 @@ export function MobileMenu({ displayName }: { displayName: string }) {
                 請求書
               </Link>
               <Link
+                href="/contracts"
+                onClick={() => setOpen(false)}
+                className="block px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+              >
+                契約書
+              </Link>
+              <Link
                 href="/account"
                 onClick={() => setOpen(false)}
                 className="block px-3 py-3 rounded-lg text-gray-700 hover:bg-gray-50"

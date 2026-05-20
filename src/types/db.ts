@@ -74,6 +74,18 @@ export type MyCompany = {
     notes: string | null
   }
   
+  export type Contract = {
+    id: string
+    user_id: string
+    document_number: string
+    title: string
+    contract_date: string
+    notes: string | null
+    issuer_snapshot: IssuerSnapshot
+    created_at: string
+    updated_at: string
+  }
+
   export type DocumentFile = {
     id: string
     user_id: string

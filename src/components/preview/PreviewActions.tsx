@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 type Props = {
   documentNumber: string
-  docType: 'estimate' | 'invoice'
+  docType: 'estimate' | 'invoice' | 'contract'
   clientName: string
   issueDate: string
 }
@@ -12,7 +12,7 @@ type Props = {
 export function PreviewActions({ documentNumber, docType, clientName, issueDate }: Props) {
   const [downloadingPdf, setDownloadingPdf] = useState(false)
 
-  const docLabel = docType === 'invoice' ? '請求書' : '見積書'
+  const docLabel = docType === 'invoice' ? '請求書' : docType === 'contract' ? '契約書' : '見積書'
   const datePart = issueDate.replace(/-/g, '')
   const safeName = clientName.replace(/[\\/:*?"<>|]/g, '_')
   const filename = `${safeName} ${docLabel}${datePart}`
