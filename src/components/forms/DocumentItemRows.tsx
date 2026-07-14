@@ -126,6 +126,10 @@ export function DocumentItemRows({ initial }: Props) {
                 + 明細を追加
             </Button>
 
+            <p className="text-xs text-gray-500 leading-relaxed">
+                ※ 割引したい場合は、明細に品名「割引」（または「サービス値引き」）、数量「1」、単価「-5000」のようにマイナスをつけて入力してください。合計から自動で差し引かれます。
+            </p>
+
             <div className="bg-gray-900 text-white rounded-xl p-4 flex items-center justify-between">
                 <span className="text-sm">合計</span>
                 <span className="text-xl font-bold">￥{formatCurrency(total)}</span>
