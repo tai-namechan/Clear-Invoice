@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { formatCurrency } from '@/lib/utils/currency'
+import { toSignedIntegerOnly } from '@/lib/utils/numericInput'
 
 export type ItemRow = {
     name: string
@@ -96,11 +97,12 @@ export function DocumentItemRows({ initial }: Props) {
                         <Input
                             name={`item_unit_price_${idx}`}
                             label="単価（円）"
-                            type="number"
+                            type="text"
                             inputMode="numeric"
-                            numericMode="integer"
                             value={row.unit_price}
-                            onChange={(e) => updateRow(idx, 'unit_price', e.target.value)}
+                            onChange={(e) =>
+                                updateRow(idx, 'unit_price', toSignedIntegerOnly(e.target.value))
+                            }
                         />
 
                         <Input

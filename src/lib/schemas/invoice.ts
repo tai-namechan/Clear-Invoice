@@ -4,8 +4,8 @@ export const invoiceItemSchema = z.object({
   name: z.string().min(1, '品名を入力してください'),
   quantity: z.coerce.number().min(0, '数量を正しく入力してください').default(1),
   unit: z.string().optional().nullable(),
-  unit_price: z.coerce.number().min(0, '単価を正しく入力してください').default(0),
-  amount: z.coerce.number().min(0).default(0),
+  unit_price: z.coerce.number().default(0),
+  amount: z.coerce.number().default(0),
   notes: z.string().optional().nullable(),
 })
 
