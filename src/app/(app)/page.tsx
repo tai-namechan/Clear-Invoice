@@ -5,16 +5,14 @@ import { estimateService } from '@/lib/services/estimateService'
 import { invoiceService } from '@/lib/services/invoiceService'
 import { formatCurrency } from '@/lib/utils/currency'
 
-function currentYearMonth(): string {
-  const now = new Date()
-  const y = now.getFullYear()
-  const m = String(now.getMonth() + 1).padStart(2, '0')
-  return `${y}-${m}`
+function currentYear(): string {
+  return String(new Date().getFullYear())
 }
 
-function isCurrentTargetMonth(targetMonth: string | null): boolean {
+/** 請求対象月（YYYY-MM）が今年度（1月〜12月）かどうか */
+function isInCurrentYear(targetMonth: string | null): boolean {
   if (!targetMonth) return false
-  return targetMonth === currentYearMonth()
+  return targetMonth.startsWith(currentYear())
 }
 
 export default async function DashboardPage() {
@@ -33,14 +31,12 @@ export default async function DashboardPage() {
     (user.user_metadata?.display_name as string) ||
     (user.email?.split('@')[0] ?? 'ゲスト')
 
-  const thisMonth = currentYearMonth()
-
-  const monthlyEstimateTotal = estimates
-    .filter((e: Estimate) => isCurrentTargetMonth(e.target_month))
+  const yearlyEstimateTotal = estimates
+    .filter((e: Estimate) => isInCurrentYear(e.target_month))
     .reduce((sum: number, e: Estimate) => sum + e.total, 0)
 
-  const monthlyInvoiceTotal = invoices
-    .filter((i: Invoice) => isCurrentTargetMonth(i.target_month))
+  const yearlyInvoiceTotal = invoices
+    .filter((i: Invoice) => isInCurrentYear(i.target_month))
     .reduce((sum: number, i: Invoice) => sum + i.total, 0)
 
   return (
@@ -142,7 +138,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* 見積書カード */}
         <Link
-          href={`/documents?type=estimate&targetMonth=${thisMonth}`}
+          href={`/documents?type=estimate`}
           className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 transition group block"
         >
           <div className="flex items-start justify-between gap-4">
@@ -165,11 +161,11 @@ export default async function DashboardPage() {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-blue-600">今月の見積書</p>
+                <p className="text-sm font-medium text-blue-600">今年の見積書</p>
                 <p className="mt-1 text-2xl font-bold text-gray-900">
-                  ¥{formatCurrency(monthlyEstimateTotal)}
+                  ¥{formatCurrency(yearlyEstimateTotal)}
                 </p>
-                <p className="mt-0.5 text-xs text-gray-500">請求対象月の合計金額</p>
+                <p className="mt-0.5 text-xs text-gray-500">今年の合計金額</p>
               </div>
             </div>
             <svg
@@ -186,7 +182,7 @@ export default async function DashboardPage() {
             </svg>
           </div>
           <div className="mt-4 bg-blue-50 rounded-xl py-3 flex items-center justify-center gap-2 text-blue-700 text-sm font-medium">
-            今月分の一覧を見る
+            今年分の一覧を見る
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -205,7 +201,7 @@ export default async function DashboardPage() {
 
         {/* 請求書カード */}
         <Link
-          href={`/documents?type=invoice&targetMonth=${thisMonth}`}
+          href={`/documents?type=invoice`}
           className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-green-300 transition group block"
         >
           <div className="flex items-start justify-between gap-4">
@@ -227,11 +223,11 @@ export default async function DashboardPage() {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-green-700">今月の請求書</p>
+                <p className="text-sm font-medium text-green-700">今年の請求書</p>
                 <p className="mt-1 text-2xl font-bold text-gray-900">
-                  ¥{formatCurrency(monthlyInvoiceTotal)}
+                  ¥{formatCurrency(yearlyInvoiceTotal)}
                 </p>
-                <p className="mt-0.5 text-xs text-gray-500">請求対象月の合計金額</p>
+                <p className="mt-0.5 text-xs text-gray-500">今年の合計金額</p>
               </div>
             </div>
             <svg
@@ -248,7 +244,7 @@ export default async function DashboardPage() {
             </svg>
           </div>
           <div className="mt-4 bg-green-50 rounded-xl py-3 flex items-center justify-center gap-2 text-green-700 text-sm font-medium">
-            今月分の一覧を見る
+            今年分の一覧を見る
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -266,7 +262,7 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      <p className="text-center text-xs text-gray-400">※ 金額は請求対象月が今月の書類の合計です。</p>
+      <p className="text-center text-xs text-gray-400">※ 今年（1月〜12月）の合計金額です。</p>
     </div>
   )
 }

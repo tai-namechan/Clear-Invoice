@@ -22,6 +22,13 @@ export function toHalfWidthDigits(value: string): string {
   export function toIntegerOnly(value: string): string {
     return toHalfWidthDigits(value).replace(/[^0-9]/g, '')
   }
+
+  /**
+   * 単価用: 整数 + 先頭のマイナス記号を許容
+   */
+  export function toSignedIntegerOnly(value: string): string {
+    return toHalfWidthDigits(value).replace(/[^0-9-]/g, '').replace(/(?!^)-/g, '')
+  }
   
   /**
    * 電話番号・郵便番号用（数字とハイフンのみ）
