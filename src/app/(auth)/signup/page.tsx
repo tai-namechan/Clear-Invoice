@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Logo } from '@/components/ui/Logo'
+import { AuthShell } from '@/components/ui/AuthShell'
 
 function EyeIcon({ open }: { open: boolean }) {
   if (open) {
@@ -76,15 +76,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10">
-      <div className="mb-8 flex flex-col items-center gap-3">
-        <Logo />
-        <p className="text-sm md:text-base text-gray-500 text-center">
-          手書きを卒業し、自動化へ。
-        </p>
-      </div>
-
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-[0_16px_50px_rgba(15,23,42,0.08)] p-6 md:p-8">
+    <AuthShell>
         <h1 className="text-2xl font-bold text-gray-900 mb-1 text-center">新規登録</h1>
         <p className="text-gray-500 mb-6 text-center text-sm">Clear Invoice のアカウントを作成</p>
 
@@ -184,7 +176,6 @@ export default function SignupPage() {
                 ログイン
               </Link>
             </div>
-      </div>
-    </div>
+    </AuthShell>
   )
 }
