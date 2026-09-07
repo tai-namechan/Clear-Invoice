@@ -29,7 +29,7 @@ export default async function ContractsPage() {
         <div className="space-y-3">
           {contracts.map((contract) => (
             <Link key={contract.id} href={`/contracts/${contract.id}`}>
-              <Card className="p-4 hover:border-gray-400 transition cursor-pointer">
+              <Card className="p-4 hover:shadow-[0_12px_36px_rgba(15,23,42,0.1)] transition cursor-pointer">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 text-xs text-gray-500">

@@ -1,10 +1,10 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { Logo } from '@/components/ui/Logo'
 
 function EyeIcon({ open }: { open: boolean }) {
   if (open) {
@@ -76,34 +76,19 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex flex-col items-center py-10">
-      <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 text-center mb-2">
-        Clear Invoice
-      </h1>
-      <p className="text-lg md:text-2xl text-gray-600 text-center mb-8">
-        手書きの請求書を、もっとカンタンに。
-      </p>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10">
+      <div className="mb-8 flex flex-col items-center gap-3">
+        <Logo />
+        <p className="text-sm md:text-base text-gray-500 text-center">
+          手書きを卒業し、自動化へ。
+        </p>
+      </div>
 
-      <div className="w-full max-w-7xl mx-auto bg-white rounded-3xl shadow-xl flex flex-col md:flex-row overflow-hidden">
-        {/* 左: 画像エリア */}
-        <div className="w-full md:w-2/3 flex items-center justify-center bg-gray-50 p-8 md:p-12">
-          <Image
-            src="/images/auth-hero.png"
-            alt="Clear Invoice Hero"
-            width={700}
-            height={500}
-            className="w-full h-auto object-contain"
-            priority
-          />
-        </div>
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-[0_16px_50px_rgba(15,23,42,0.08)] p-6 md:p-8">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1 text-center">新規登録</h1>
+        <p className="text-gray-500 mb-6 text-center text-sm">Clear Invoice のアカウントを作成</p>
 
-        {/* 右: フォームエリア */}
-        <div className="w-full md:w-1/3 flex flex-col justify-center p-8 md:p-12">
-          <div className="bg-white rounded-2xl shadow-md p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2 text-center">新規登録</h2>
-            <p className="text-gray-500 mb-6 text-center">Clear Invoice のアカウントを作成</p>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="flex flex-col gap-1">
                 <span className="text-gray-700 font-medium">お名前</span>
                 <input
@@ -184,23 +169,21 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-4 bg-blue-900 text-white font-bold py-3 rounded-xl shadow hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-2 bg-blue-600 text-white font-bold py-3 rounded-xl shadow-sm hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? '登録中...' : 'アカウント作成'}
               </button>
             </form>
 
-            <div className="mt-6 text-center text-gray-600">
+            <div className="mt-6 text-center text-sm text-gray-600">
               すでにアカウントをお持ちの方は{' '}
               <Link
                 href="/login"
-                className="text-blue-900 font-semibold underline hover:text-blue-700"
+                className="text-blue-600 font-semibold hover:text-blue-700"
               >
                 ログイン
               </Link>
             </div>
-          </div>
-        </div>
       </div>
     </div>
   )

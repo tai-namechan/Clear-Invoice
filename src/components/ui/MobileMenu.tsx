@@ -22,7 +22,7 @@ export function MobileMenu({ displayName }: { displayName: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center"
+        className="w-10 h-10 rounded-xl bg-white shadow-[0_4px_16px_rgba(15,23,42,0.08)] flex items-center justify-center"
         aria-label="メニュー"
       >
         <svg

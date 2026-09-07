@@ -141,7 +141,7 @@ export function DocumentList({ estimates, invoices, contracts }: Props) {
   return (
     <div className="space-y-4">
       {/* タブ */}
-      <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+      <div className="flex gap-1 bg-gray-100/90 rounded-2xl p-1.5 shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
         {tabItems.map((tab) => (
           <button
             key={tab.value}
@@ -189,7 +189,7 @@ export function DocumentList({ estimates, invoices, contracts }: Props) {
 
       {/* 一覧 */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center">
+        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.06)] p-8 text-center">
           <p className="text-gray-500">書類がありません</p>
           {targetMonth && (
             <p className="mt-1 text-sm text-gray-400">
@@ -204,7 +204,7 @@ export function DocumentList({ estimates, invoices, contracts }: Props) {
               return (
                 <div
                   key={`contract-${doc.id}`}
-                  className="bg-white rounded-xl border border-gray-200 p-4"
+                  className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.06)] p-4"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
@@ -255,7 +255,7 @@ export function DocumentList({ estimates, invoices, contracts }: Props) {
             return (
               <div
                 key={`${doc.docType}-${doc.id}`}
-                className="bg-white rounded-xl border border-gray-200 p-4"
+                className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.06)] p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
